@@ -1,12 +1,16 @@
-package project.walmartlabs.com.productlist;
+package com.walmartlabs.productlist.ui.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.walmartlabs.productlist.R;
+import com.walmartlabs.productlist.bean.ProductBean;
+import com.walmartlabs.productlist.ui.fragments.ProductListFragment;
 
-public class ProductListActivity extends ActionBarActivity {
+
+public class ProductListActivity extends ActionBarActivity implements ProductListFragment.OnProductListActionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,22 +19,23 @@ public class ProductListActivity extends ActionBarActivity {
     }
 
 
-    @Override 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.product_list, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClickProduct(ProductBean productBean) {
+
     }
 }
