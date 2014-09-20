@@ -7,7 +7,10 @@ import android.view.MenuItem;
 
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.bean.ProductBean;
+import com.walmartlabs.productlist.controller.ProductController;
 import com.walmartlabs.productlist.ui.fragments.ProductListFragment;
+
+import java.util.List;
 
 
 public class ProductListActivity extends ActionBarActivity implements ProductListFragment.OnProductListActionListener{
@@ -16,6 +19,11 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+
+        ///TODO TEMP
+        ProductController productController = new ProductController(this);
+        List<ProductBean> list = productController.buildFakeList(30);
+        productController.insertProductList(list);
     }
 
 

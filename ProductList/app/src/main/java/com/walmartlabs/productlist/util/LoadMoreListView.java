@@ -15,15 +15,21 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
 
     public LoadMoreListView(Context context) {
         super(context);
-        setOnScrollListener(this);
+        init();
     }
 
     public LoadMoreListView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public LoadMoreListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
+    }
+
+    private void init() {
+        setOnScrollListener(this);
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
@@ -40,12 +46,14 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
                          int visibleItemCount, int totalItemCount) {
 
         Log.d("Scroll", "onScroll currentPage = " + currentPage + " visibleItemCount ="
-                + visibleItemCount + " totalItemCount =" + totalItemCount);
+                + visibleItemCount + " totalItemCount =" + totalItemCount +
+                " firstVisibleItem =" + firstVisibleItem);
 
         if (loading) {
             if (totalItemCount > previousTotal) {
                 Log.d("Scroll", "NewPage currentPage = " + currentPage + " visibleItemCount ="
-                + visibleItemCount + " totalItemCount =" + totalItemCount);
+                + visibleItemCount + " totalItemCount =" + totalItemCount +
+                        " firstVisibleItem =" + firstVisibleItem);
                 loading = false;
                 previousTotal = totalItemCount;
                 currentPage++;
@@ -56,7 +64,8 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
                 && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 
             Log.d("Scroll", "LoadMore currentPage = " + currentPage + " visibleItemCount ="
-                    + visibleItemCount + " totalItemCount =" + totalItemCount);
+                    + visibleItemCount + " totalItemCount =" + totalItemCount +
+                    " firstVisibleItem =" + firstVisibleItem);
 
             if (onLoadMoreListener != null) {
                 onLoadMoreListener.onLoadMore(previousTotal, currentPage);

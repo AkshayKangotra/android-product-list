@@ -11,7 +11,7 @@ public class ProductSQLHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_PRODUCTS = "products";
 
-    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_PRODUCT_ID = "_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_SHORT_DESCRIPTION = "short_description";
     public static final String COLUMN_LONG_DESCRIPTION = "long_description";
@@ -20,10 +20,11 @@ public class ProductSQLHelper extends SQLiteOpenHelper {
     public static final String COLUMN_REVIEW_RATING = "review_rating";
     public static final String COLUMN_REVIEW_COUNT = "review_count";
     public static final String COLUMN_IN_STOCK = "in_stock";
+    public static final String COLUMN_ORDER = "product_order";
 
     private static final String DATABASE_CREATE = "CREATE TABLE "
             + TABLE_PRODUCTS + "("
-            + COLUMN_ID + " TEXT NOT NULL PRIMARY KEY, "
+            + COLUMN_PRODUCT_ID + " TEXT NOT NULL PRIMARY KEY, "
             + COLUMN_NAME + " TEXT NOT NULL, "
             + COLUMN_SHORT_DESCRIPTION + " TEXT, "
             + COLUMN_LONG_DESCRIPTION + " TEXT, "
@@ -31,7 +32,8 @@ public class ProductSQLHelper extends SQLiteOpenHelper {
             + COLUMN_IMAGE_URL + " TEXT, "
             + COLUMN_REVIEW_RATING + " REAL, "
             + COLUMN_REVIEW_COUNT + " INT, "
-            + COLUMN_IN_STOCK + " INT"
+            + COLUMN_IN_STOCK + " INT, "
+            + COLUMN_ORDER + " INT"
             +");";
 
     private static ProductSQLHelper mInstance;
