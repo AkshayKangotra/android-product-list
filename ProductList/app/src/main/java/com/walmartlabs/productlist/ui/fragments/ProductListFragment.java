@@ -21,10 +21,13 @@ import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
 import com.walmartlabs.productlist.util.LoadMoreListView;
 
+import java.util.List;
+
 public class ProductListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private OnProductListActionListener productListActionListener;
+    private OnProductListActionListener mProductListActionListener;
     private ProductAdapter mProductAdapter;
+    private LoadMoreListView mLoadMoreListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,13 +41,14 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        LoadMoreListView loadMoreListView = (LoadMoreListView) view.findViewById(R.id.listview_product);
-        loadMoreListView.setAdapter(mProductAdapter);
+        mLoadMoreListView = (LoadMoreListView) view.findViewById(R.id.listview_product);
+        mLoadMoreListView.setAdapter(mProductAdapter);
 
-        loadMoreListView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
+        mLoadMoreListView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
             @Override
-            public void onLoadMore(int previousTotal, int currentPage) {
-
+            public void onLoadMore(int previousTotal) {
+                ProductController productController = new ProductController(getActivity());
+                productController.loadProducts(true);
             }
         });
 
@@ -54,7 +58,7 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            productListActionListener = (OnProductListActionListener) activity;
+            mProductListActionListener = (OnProductListActionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -64,7 +68,7 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onDetach() {
         super.onDetach();
-        productListActionListener = null;
+        mProductListActionListener = null;
     }
 
     //Loader methods
@@ -82,6 +86,12 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mProductAdapter.swapCursor(null);
+    }
+
+    public void loadCompleted() {
+        if (mLoadMoreListView != null) {
+            mLoadMoreListView.loadMoreCompleted();
+        }
     }
 
     public interface OnProductListActionListener {

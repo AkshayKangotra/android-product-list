@@ -23,70 +23,15 @@ public class ProductContentProvider extends ContentProvider {
     private static final String LOG_TAG = ProductContentProvider.class.getSimpleName();
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-
-        String table = uri.getLastPathSegment();
-        SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
-        int count = mDb.delete(table, selection, selectionArgs);
-        getContext().getContentResolver().notifyChange(uri, null);
-
-        return count;
+    public boolean onCreate() {
+        Log.d(LOG_TAG, "onCreate");
+        sqlHelper = ProductSQLHelper.getInstance(getContext());
+        return true;
     }
 
     @Override
     public String getType(Uri uri) {
         return "vnd.android.cursor.dir/vnd." + AUTHORITY;
-    }
-
-    @Override
-    public synchronized int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
-        String table = uri.getLastPathSegment();
-        SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
-        mDb.beginTransaction();
-
-        try {
-            for (ContentValues value : values) {
-                mDb.insertWithOnConflict(table, null, value, SQLiteDatabase.CONFLICT_REPLACE);
-            }
-
-            mDb.setTransactionSuccessful();
-            getContext().getContentResolver().notifyChange(uri, null);
-        } catch (SQLiteDiskIOException ignored) {
-
-        } finally {
-            mDb.endTransaction();
-        }
-
-        return values.length;
-    }
-
-
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        String table = uri.getLastPathSegment();
-        SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
-
-        mDb.beginTransaction();
-
-        try {
-            mDb.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-
-            mDb.setTransactionSuccessful();
-            getContext().getContentResolver().notifyChange(uri, null);
-        } catch (SQLiteDiskIOException ignored) {
-
-        } finally {
-            mDb.endTransaction();
-        }
-
-        return uri;
-    }
-
-    @Override
-    public boolean onCreate() {
-        Log.d(LOG_TAG, "onCreate");
-        sqlHelper = ProductSQLHelper.getInstance(getContext());
-        return true;
     }
 
     @Override
@@ -118,6 +63,49 @@ public class ProductContentProvider extends ContentProvider {
     }
 
     @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        String table = uri.getLastPathSegment();
+        SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
+
+        mDb.beginTransaction();
+
+        try {
+            mDb.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+
+            mDb.setTransactionSuccessful();
+            getContext().getContentResolver().notifyChange(uri, null);
+        } catch (SQLiteDiskIOException ignored) {
+
+        } finally {
+            mDb.endTransaction();
+        }
+
+        return uri;
+    }
+
+    @Override
+    public synchronized int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
+        String table = uri.getLastPathSegment();
+        SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
+        mDb.beginTransaction();
+
+        try {
+            for (ContentValues value : values) {
+                mDb.insertWithOnConflict(table, null, value, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+
+            mDb.setTransactionSuccessful();
+            getContext().getContentResolver().notifyChange(uri, null);
+        } catch (SQLiteDiskIOException ignored) {
+
+        } finally {
+            mDb.endTransaction();
+        }
+
+        return values.length;
+    }
+
+    @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         String table = uri.getLastPathSegment();
         SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
@@ -133,4 +121,16 @@ public class ProductContentProvider extends ContentProvider {
 
         return count;
     }
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        String table = uri.getLastPathSegment();
+        SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
+        int count = mDb.delete(table, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return count;
+    }
+
 }

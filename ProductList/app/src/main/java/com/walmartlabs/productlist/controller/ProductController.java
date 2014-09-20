@@ -2,6 +2,7 @@ package com.walmartlabs.productlist.controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.content.Loader;
 
@@ -12,6 +13,7 @@ import java.util.Random;
 import com.walmartlabs.productlist.dao.ProductDBManager;
 import com.walmartlabs.productlist.dao.ProductSQLHelper;
 import com.walmartlabs.productlist.bean.ProductBean;
+import com.walmartlabs.productlist.services.FeedDataService;
 
 public class ProductController {
 
@@ -28,8 +30,8 @@ public class ProductController {
             cvList.add(productToContentValues(productBean));
         }
 
-        ContentValues[] contentValueses = cvList.toArray(new ContentValues[cvList.size()]);
-        ProductDBManager.getInstance(mContext).insertList(ProductSQLHelper.TABLE_PRODUCTS, contentValueses);
+        ContentValues[] contentValues = cvList.toArray(new ContentValues[cvList.size()]);
+        ProductDBManager.getInstance(mContext).insertList(ProductSQLHelper.TABLE_PRODUCTS, contentValues);
     }
 
     public ContentValues productToContentValues(ProductBean productBean) {
@@ -63,34 +65,17 @@ public class ProductController {
         return productBean;
     }
 
-
-    ////TEMP
-    public List<ProductBean> buildFakeList(int qtd) {
-
-        List<ProductBean> productBeans = new ArrayList<ProductBean>();
-
-        for (int i=0; i < qtd; i++) {
-            ProductBean productBean = new ProductBean();
-            productBean.productId = "" + i;
-            productBean.productName = "Produto" + i;
-            productBean.shortDescription = "shortDesc" + i;
-            productBean.longDescription= "longDesc" + i;
-            productBean.price= "$" + i + "." + i;
-            productBean.productImage= "http://wp.clicrbs.com.br/pretinhobasico/files/2014/02/faust%C3%A3o-gordo.jpg";
-            productBean.reviewRating = 4.4;
-            productBean.reviewCount = i;
-            productBean.inStock = new Random().nextBoolean();
-
-            productBeans.add(productBean);
-        }
-
-        return productBeans;
-    }
-    ///
-
     public Loader<Cursor> getProductLoader() {
         return ProductDBManager.getInstance(mContext)
                 .getLoader(ProductSQLHelper.TABLE_PRODUCTS, null, null, null, ProductSQLHelper.COLUMN_ORDER);
+    }
+
+    public void loadProducts(boolean forceLoad){
+        //TODO add cache verification
+        if (ProductDBManager.getInstance(mContext).count(ProductSQLHelper.TABLE_PRODUCTS) == 0 || forceLoad) {
+            Intent intent = new Intent(mContext, FeedDataService.class);
+            mContext.startService(intent);
+        }
     }
 
 }

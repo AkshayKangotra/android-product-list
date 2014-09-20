@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">ProductList</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="load_products_error">An error occurred while loading the product list.</string>
 
 </resources>

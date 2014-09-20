@@ -2,16 +2,17 @@ package com.walmartlabs.productlist.util;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.walmartlabs.productlist.R;
+
 public class LoadMoreListView extends ListView implements AbsListView.OnScrollListener {
-    private int visibleThreshold = 10;
-    private int currentPage = 0;
-    private int previousTotal = 0;
-    private boolean loading = true;
+    private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
+    private View loadView;
 
     public LoadMoreListView(Context context) {
         super(context);
@@ -28,12 +29,14 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         init();
     }
 
-    private void init() {
+    public void init() {
         setOnScrollListener(this);
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
+        LayoutInflater inflater = LayoutInflater.from(super.getContext());
+        loadView = inflater.inflate(R.layout.load_more_view, null);
     }
 
     @Override
@@ -41,41 +44,32 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
 
     }
 
+    //Based on http://www.survivingwithandroid.com/2013/10/android-listview-endless-adapter.html
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
-
-        Log.d("Scroll", "onScroll currentPage = " + currentPage + " visibleItemCount ="
-                + visibleItemCount + " totalItemCount =" + totalItemCount +
-                " firstVisibleItem =" + firstVisibleItem);
-
-        if (loading) {
-            if (totalItemCount > previousTotal) {
-                Log.d("Scroll", "NewPage currentPage = " + currentPage + " visibleItemCount ="
-                + visibleItemCount + " totalItemCount =" + totalItemCount +
-                        " firstVisibleItem =" + firstVisibleItem);
-                loading = false;
-                previousTotal = totalItemCount;
-                currentPage++;
-            }
+        if (getAdapter() == null) {
+            return;
+        }
+        if (getAdapter().getCount() == 0) {
+            return;
         }
 
-        if (!loading
-                && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+        int lastVisibleItemIndex = visibleItemCount + firstVisibleItem;
 
-            Log.d("Scroll", "LoadMore currentPage = " + currentPage + " visibleItemCount ="
-                    + visibleItemCount + " totalItemCount =" + totalItemCount +
-                    " firstVisibleItem =" + firstVisibleItem);
-
-            if (onLoadMoreListener != null) {
-                onLoadMoreListener.onLoadMore(previousTotal, currentPage);
-            }
-
+        if (lastVisibleItemIndex >= totalItemCount && !loading) {
+            this.addFooterView(loadView);
             loading = true;
+            onLoadMoreListener.onLoadMore(totalItemCount);
         }
     }
 
+    public void loadMoreCompleted() {
+        this.removeFooterView(loadView);
+        loading = false;
+    }
+
     public interface OnLoadMoreListener {
-        void onLoadMore(int previousTotal, int currentPage);
+        void onLoadMore(int previousTotal);
     }
 }

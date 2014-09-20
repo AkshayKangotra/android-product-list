@@ -9,6 +9,7 @@
     tools:context=".ProductListActivity">
 
     <fragment
+        android:id="@+id/product_list_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.walmartlabs.productlist.ui.fragments.ProductListFragment"

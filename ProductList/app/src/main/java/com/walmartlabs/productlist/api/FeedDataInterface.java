@@ -1,15 +1,14 @@
-package com.walmartlabs.productlist.helper;
+package com.walmartlabs.productlist.api;
 
-import java.util.List;
+import com.walmartlabs.productlist.bean.ProductBeanResponse;
 
-import com.walmartlabs.productlist.bean.ProductBean;
 import retrofit.http.GET;
 import retrofit.http.Path;
 
 public interface FeedDataInterface {
 
     @GET("/walmartproducts/{pageNumber}/{pageSize}")
-    List<ProductBean> groupProductList(@Path("pageNumber") int pageNumber,
+    ProductBeanResponse getProductList(@Path("pageNumber") int pageNumber,
                                        @Path("pageSize") int pageSize);
 
 }

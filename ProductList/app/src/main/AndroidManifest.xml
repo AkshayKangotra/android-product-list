@@ -2,13 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.walmartlabs.productlist" >
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.walmartlabs.productlist.ui.activities.ProductListActivity"
+            android:name=".ui.activities.ProductListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,9 +20,14 @@
         </activity>
 
         <provider
+            android:name=".dao.ProductContentProvider"
             android:authorities="${applicationId}"
-            android:name="com.walmartlabs.productlist.dao.ProductContentProvider"
             android:exported="false" />
+
+        <service
+            android:name=".services.FeedDataService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
