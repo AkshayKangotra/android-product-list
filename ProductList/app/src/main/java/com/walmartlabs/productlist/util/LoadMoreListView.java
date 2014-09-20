@@ -2,6 +2,7 @@ package com.walmartlabs.productlist.util;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
@@ -9,8 +10,10 @@ import android.widget.ListView;
 
 import com.walmartlabs.productlist.R;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class LoadMoreListView extends ListView implements AbsListView.OnScrollListener {
-    private boolean loading;
+    private AtomicBoolean loading = new AtomicBoolean(false);
     private OnLoadMoreListener onLoadMoreListener;
     private View loadView;
 
@@ -57,16 +60,16 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
 
         int lastVisibleItemIndex = visibleItemCount + firstVisibleItem;
 
-        if (lastVisibleItemIndex >= totalItemCount && !loading) {
+        if (lastVisibleItemIndex >= totalItemCount && loading.compareAndSet(false,true)) {
+            Log.d("Request Products", "LoadMore");
             this.addFooterView(loadView);
-            loading = true;
             onLoadMoreListener.onLoadMore(totalItemCount);
         }
     }
 
     public void loadMoreCompleted() {
         this.removeFooterView(loadView);
-        loading = false;
+        loading.set(false);
     }
 
     public interface OnLoadMoreListener {

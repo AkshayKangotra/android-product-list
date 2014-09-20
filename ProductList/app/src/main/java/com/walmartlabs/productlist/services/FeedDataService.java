@@ -27,7 +27,7 @@ public class FeedDataService extends IntentService {
         Intent intentBroadcast = new Intent(Constants.LOAD_FINISHED_ACTION);
         ProductBeanResponse productBeanResponse = new FeedDataAPI().getProductList(pageNumber, Constants.NUMBER_OF_PRODUCTS_PER_PAGE);
 
-        Log.d("Request Products", "New request");
+        Log.d("Request Products", "New request pageNumber = " + pageNumber);
 
         if (productBeanResponse != null) {
             List<ProductBean> productBeanList = productBeanResponse.products;
@@ -38,7 +38,9 @@ public class FeedDataService extends IntentService {
                 productController.insertProductList(productBeanList);
 
                 listSize = productBeanList.size();
+                Log.d("Request Products", "New request ListSize = " + listSize);
             }
+
             intentBroadcast.putExtra(Constants.LIST_SIZE_INTENT_EXTRA, listSize);
         }
 

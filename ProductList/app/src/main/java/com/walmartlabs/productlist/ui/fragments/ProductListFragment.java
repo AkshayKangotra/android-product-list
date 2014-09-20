@@ -2,8 +2,8 @@ package com.walmartlabs.productlist.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ListView;
 
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.adapters.ProductAdapter;
@@ -23,7 +24,7 @@ import com.walmartlabs.productlist.util.LoadMoreListView;
 
 import java.util.List;
 
-public class ProductListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ProductListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private OnProductListActionListener mProductListActionListener;
     private ProductAdapter mProductAdapter;
@@ -51,7 +52,6 @@ public class ProductListFragment extends Fragment implements LoaderManager.Loade
                 productController.loadProducts(true);
             }
         });
-
     }
 
     @Override

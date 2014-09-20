@@ -47,11 +47,6 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
 
         ProductController productController = new ProductController(this);
         productController.loadProducts(false);
-
-        ///TODO TEMP
-//        ProductController productController = new ProductController(this);
-//        List<ProductBean> list = productController.buildFakeList(30);
-//        productController.insertProductList(list);
     }
 
 
@@ -78,8 +73,9 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
 
     @Override
     public void onClickProduct(ProductBean productBean) {
-
+        Intent intent = new Intent(this, ProductActivity.class);
+        intent.putExtra(Constants.PRODUCT_ID_INTENT_EXTRA, productBean.productId);
+        startActivity(intent);
     }
-
 
 }

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.walmartlabs.productlist" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +28,11 @@
             android:name=".services.FeedDataService"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name=".ui.activities.ProductActivity"
+            android:label="@string/title_activity_product" >
+        </activity>
     </application>
 
 </manifest>

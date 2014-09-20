@@ -9,6 +9,8 @@ import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.walmartlabs.productlist.bean.ProductBean;
+
 public class ProductDBManager {
     private static final String LOG_TAG = ProductDBManager.class.getSimpleName();
     protected Context mContext;
@@ -29,6 +31,31 @@ public class ProductDBManager {
     public Loader<Cursor> getLoader(String table, String[] projection, String selection, String[] selectionArgs, String order) {
         Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon().appendPath(table).build();
         return new CursorLoader(mContext, uri, projection, selection, selectionArgs, order);
+    }
+
+    public Cursor getAllItems(String table, String orderByClause) {
+        Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon().appendPath(table).build();
+        return mContext.getContentResolver().query(uri, null, null, null, orderByClause);
+    }
+
+    public int getPositionById(String table, String productId) {
+        Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon().appendPath(table).build();
+        String orderByClause = ProductSQLHelper.COLUMN_ORDER;
+        Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, orderByClause);
+
+        int result = 0;
+        if (cursor != null) {
+            ProductBean productBean;
+            while(cursor.moveToNext()) {
+                productBean = new ProductBean();
+                if(productBean.productId.equals(productId)) {
+                    result = cursor.getPosition();
+                    break;
+                }
+            }
+            cursor.close();
+        }
+        return result;
     }
 
     public void insertList(String table, ContentValues[] values) {
