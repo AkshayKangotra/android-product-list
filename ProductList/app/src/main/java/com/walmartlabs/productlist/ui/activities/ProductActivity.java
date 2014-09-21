@@ -17,12 +17,13 @@ import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
 import com.walmartlabs.productlist.dao.ProductDBManager;
 import com.walmartlabs.productlist.dao.ProductSQLHelper;
+import com.walmartlabs.productlist.tracker.MixPanelDelegate;
 import com.walmartlabs.productlist.ui.fragments.ProductFragment;
 import com.walmartlabs.productlist.util.Constants;
 
 public class ProductActivity extends ActionBarActivity {
 
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,12 @@ public class ProductActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.product, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MixPanelDelegate.flush();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

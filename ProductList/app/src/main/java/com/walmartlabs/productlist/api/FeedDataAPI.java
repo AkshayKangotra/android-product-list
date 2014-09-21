@@ -10,7 +10,7 @@ import retrofit.http.Path;
 
 public class FeedDataAPI implements FeedDataInterface{
 
-    Context mContext;
+    private Context mContext;
 
     public FeedDataAPI(Context context) {
         mContext = context;

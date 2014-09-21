@@ -1,10 +1,7 @@
 package com.walmartlabs.productlist.ui.fragments;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -92,8 +89,10 @@ public class ProductFragment extends Fragment {
 
             if (getArguments() != null) {
                 String productId = getArguments().getString(Constants.PRODUCT_ID_INTENT_EXTRA);
-                productBean = ProductDBManager.getInstance(getActivity()
-                        .getApplicationContext()).getItemById(ProductSQLHelper.TABLE_PRODUCTS, productId);
+                if (productId != null) {
+                    productBean = ProductDBManager.getInstance(getActivity()
+                            .getApplicationContext()).getItemById(ProductSQLHelper.TABLE_PRODUCTS, productId);
+                }
             }
             return productBean;
         }

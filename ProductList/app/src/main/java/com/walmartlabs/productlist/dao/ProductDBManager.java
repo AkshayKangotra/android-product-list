@@ -13,7 +13,7 @@ import com.walmartlabs.productlist.controller.ProductController;
 
 public class ProductDBManager {
     private static final String LOG_TAG = ProductDBManager.class.getSimpleName();
-    protected Context mContext;
+    private Context mContext;
     private static ProductDBManager sDBManager;
 
     public static ProductDBManager getInstance(Context ctx) {

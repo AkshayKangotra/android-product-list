@@ -25,16 +25,16 @@ import com.walmartlabs.productlist.util.ImageLoadUtil;
 public class ProductAdapter extends CursorAdapter {
 
     private LayoutInflater mLayoutInflater;
-    private static IonBitmapCache mIonBitmapCache;
-    private static ProductListFragment.OnProductListActionListener mProductListActionListener;
+    private static IonBitmapCache sIonBitmapCache;
+    private static ProductListFragment.OnProductListActionListener sProductListActionListener;
 
     public ProductAdapter(Activity activity, Cursor cursor){
         super(activity, cursor, 0);
         mLayoutInflater = LayoutInflater.from(activity);
 
-        mProductListActionListener = (ProductListFragment.OnProductListActionListener) activity;
+        sProductListActionListener = (ProductListFragment.OnProductListActionListener) activity;
 
-        mIonBitmapCache = new IonBitmapCache(Ion.getDefault(activity.getApplicationContext()));
+        sIonBitmapCache = new IonBitmapCache(Ion.getDefault(activity.getApplicationContext()));
     }
 
     @Override
@@ -84,20 +84,20 @@ public class ProductAdapter extends CursorAdapter {
                 price.setText(productBean.price);
             }
             if (productBean.productImage != null) {
-                BitmapInfo cachedBitmapInfo = mIonBitmapCache.get(AndroidUtil.sha256String(productBean.productImage));
+                BitmapInfo cachedBitmapInfo = sIonBitmapCache.get(AndroidUtil.sha256String(productBean.productImage));
                 Boolean onCache = (cachedBitmapInfo != null && cachedBitmapInfo.bitmaps[0] != null);
 
                 if (onCache) {
                     productImage.setImageBitmap(cachedBitmapInfo.bitmaps[0]);
                 } else {
-                    ImageLoadUtil.loadImage(context, productImage, productBean.productImage, mIonBitmapCache);
+                    ImageLoadUtil.loadImage(context, productImage, productBean.productImage, sIonBitmapCache);
                 }
             }
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mProductListActionListener != null) {
-                        mProductListActionListener.onClickProduct(productBean);
+                    if (sProductListActionListener != null) {
+                        sProductListActionListener.onClickProduct(productBean);
                     }
                 }
             });

@@ -21,7 +21,7 @@ public class ProductListFragment extends ListFragment implements LoaderManager.L
 
     private ProductAdapter mProductAdapter;
     private LoadMoreListView mLoadMoreListView;
-    private ProgressBar progressBarFirstLoad;
+    private ProgressBar mProgressBarFirstLoad;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +35,7 @@ public class ProductListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        progressBarFirstLoad = (ProgressBar) view.findViewById(R.id.prg_bar_first_load);
+        mProgressBarFirstLoad = (ProgressBar) view.findViewById(R.id.prg_bar_first_load);
         mLoadMoreListView = (LoadMoreListView) view.findViewById(R.id.listview_product);
         mLoadMoreListView.setAdapter(mProductAdapter);
 
@@ -60,7 +60,7 @@ public class ProductListFragment extends ListFragment implements LoaderManager.L
         mProductAdapter.swapCursor(cursor);
 
         if (cursor != null && cursor.getCount() > 0) {
-            progressBarFirstLoad.setVisibility(View.GONE);
+            mProgressBarFirstLoad.setVisibility(View.GONE);
         }
     }
 

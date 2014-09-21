@@ -10,4 +10,6 @@
     <string name="ion_cache_image_type">image/png</string>
     <integer name="data_cache_time">3600000</integer>
 
+    <string name="mix_panel_token">047bbf642b800a1cca34bdd6ed1d26ee</string>
+
 </resources>

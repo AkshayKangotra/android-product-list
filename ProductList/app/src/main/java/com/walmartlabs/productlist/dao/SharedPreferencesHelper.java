@@ -7,19 +7,19 @@ import com.walmartlabs.productlist.R;
 
 public class SharedPreferencesHelper {
 
-    private static SharedPreferencesHelper sharedPreferencesHelper;
-    private static SharedPreferences sharedPreferences;
+    private static SharedPreferencesHelper sSharedPreferencesHelper;
+    private static SharedPreferences sSharedPreferences;
 
     private SharedPreferencesHelper() {
     }
 
     public static SharedPreferencesHelper getInstance(Context context) {
-        if(sharedPreferencesHelper == null) {
-            sharedPreferences = context.getSharedPreferences(
+        if(sSharedPreferencesHelper == null) {
+            sSharedPreferences = context.getSharedPreferences(
                     context.getResources().getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
-            sharedPreferencesHelper = new SharedPreferencesHelper();
+            sSharedPreferencesHelper = new SharedPreferencesHelper();
         }
-        return sharedPreferencesHelper;
+        return sSharedPreferencesHelper;
     }
 
     //Accessor methods
@@ -30,7 +30,8 @@ public class SharedPreferencesHelper {
     }
 
     public enum Key implements DefaultKey {
-        LAST_DATA_ACCESS_TIME(0l);
+        LAST_DATA_ACCESS_TIME(0l),
+        FIRST_RUN("true");
 
         private String defaultStringValue;
         private Long defaultLongValue;
@@ -55,7 +56,7 @@ public class SharedPreferencesHelper {
     }
 
     private void write(String key, String value) {
-        sharedPreferences.edit().putString(key, value).apply();
+        sSharedPreferences.edit().putString(key, value).apply();
     }
 
     public void writeLong(Key key, Long value) {
@@ -63,7 +64,7 @@ public class SharedPreferencesHelper {
     }
 
     private void writeLong(String key, Long value) {
-        sharedPreferences.edit().putLong(key, value).apply();
+        sSharedPreferences.edit().putLong(key, value).apply();
     }
 
     //Read
@@ -72,7 +73,7 @@ public class SharedPreferencesHelper {
     }
 
     private String read(String key, String defaultValue) {
-        return sharedPreferences.getString(key, defaultValue);
+        return sSharedPreferences.getString(key, defaultValue);
     }
 
     public Long readLong(Key key) {
@@ -80,6 +81,6 @@ public class SharedPreferencesHelper {
     }
 
     private Long readLong(String key, Long defaultValue) {
-        return sharedPreferences.getLong(key, defaultValue);
+        return sSharedPreferences.getLong(key, defaultValue);
     }
 }
