@@ -5,19 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#a5a5a5" />
+
     <FrameLayout
         android:id="@+id/list_item_product"
         android:layout_width="match_parent"
         android:layout_height="130dp">
-
-        <TextView
-            android:id="@+id/product_txt_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:text="$ 9.99"/>
 
         <ImageView
             android:id="@+id/product_image"
@@ -26,13 +22,28 @@
             android:scaleType="centerCrop"/>
 
         <TextView
+            android:id="@+id/product_txt_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="3dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:background="#99000000"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
             android:id="@+id/product_txt_name"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:layout_gravity="bottom"
-            android:text="Product name"
             android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="#FFFFFF"
             android:gravity="center_vertical"
             android:background="#99000000"/>
@@ -44,7 +55,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:maxLines="3"
-        android:ellipsize="end"/>
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:ellipsize="end"
+        android:maxLines="5"/>
 
 </LinearLayout>

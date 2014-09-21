@@ -30,8 +30,7 @@
         </service>
 
         <activity
-            android:name=".ui.activities.ProductActivity"
-            android:label="@string/title_activity_product" >
+            android:name=".ui.activities.ProductActivity">
         </activity>
     </application>
 

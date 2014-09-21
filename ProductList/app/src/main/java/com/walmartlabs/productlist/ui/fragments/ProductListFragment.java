@@ -15,20 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import com.costum.android.widget.LoadMoreListView;
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.adapters.ProductAdapter;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
-import com.walmartlabs.productlist.util.LoadMoreListView;
 
 import java.util.List;
 
 public class ProductListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private OnProductListActionListener mProductListActionListener;
     private ProductAdapter mProductAdapter;
     private LoadMoreListView mLoadMoreListView;
+    private ProgressBar progressBarFirstLoad;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,33 +43,17 @@ public class ProductListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        progressBarFirstLoad = (ProgressBar) view.findViewById(R.id.prg_bar_first_load);
         mLoadMoreListView = (LoadMoreListView) view.findViewById(R.id.listview_product);
         mLoadMoreListView.setAdapter(mProductAdapter);
 
         mLoadMoreListView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
             @Override
-            public void onLoadMore(int previousTotal) {
+            public void onLoadMore() {
                 ProductController productController = new ProductController(getActivity());
                 productController.loadProducts(true);
             }
         });
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mProductListActionListener = (OnProductListActionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mProductListActionListener = null;
     }
 
     //Loader methods
@@ -81,6 +66,10 @@ public class ProductListFragment extends ListFragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mProductAdapter.swapCursor(cursor);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            progressBarFirstLoad.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -90,7 +79,7 @@ public class ProductListFragment extends ListFragment implements LoaderManager.L
 
     public void loadCompleted() {
         if (mLoadMoreListView != null) {
-            mLoadMoreListView.loadMoreCompleted();
+            mLoadMoreListView.onLoadMoreComplete();
         }
     }
 

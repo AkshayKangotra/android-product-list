@@ -9,11 +9,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
+import com.walmartlabs.productlist.ui.fragments.ProductFragment;
 import com.walmartlabs.productlist.ui.fragments.ProductListFragment;
 import com.walmartlabs.productlist.util.Constants;
 
@@ -23,6 +25,7 @@ import java.util.List;
 public class ProductListActivity extends ActionBarActivity implements ProductListFragment.OnProductListActionListener{
 
     ProductListFragment mProductListFragment;
+    ProductFragment mProductFragment;
 
     BroadcastReceiver loadFinishedBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -42,6 +45,7 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
         setContentView(R.layout.activity_product_list);
 
         mProductListFragment = (ProductListFragment) getSupportFragmentManager().findFragmentById(R.id.product_list_fragment);
+        mProductFragment = (ProductFragment) getSupportFragmentManager().findFragmentById(R.id.product_detail_fragment);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(loadFinishedBroadcastReceiver, new IntentFilter(Constants.LOAD_FINISHED_ACTION));
 
@@ -73,9 +77,14 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
 
     @Override
     public void onClickProduct(ProductBean productBean) {
-        Intent intent = new Intent(this, ProductActivity.class);
-        intent.putExtra(Constants.PRODUCT_ID_INTENT_EXTRA, productBean.productId);
-        startActivity(intent);
+        if (getResources().getBoolean(R.bool.is_tablet)) {
+            findViewById(R.id.container_details).setVisibility(View.VISIBLE);
+            mProductFragment.fillWithProduct(productBean);
+        } else {
+            Intent intent = new Intent(this, ProductActivity.class);
+            intent.putExtra(Constants.PRODUCT_ID_INTENT_EXTRA, productBean.productId);
+            startActivity(intent);
+        }
     }
 
 }

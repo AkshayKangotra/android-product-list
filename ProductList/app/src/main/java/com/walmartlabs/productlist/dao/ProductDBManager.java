@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.walmartlabs.productlist.bean.ProductBean;
+import com.walmartlabs.productlist.controller.ProductController;
 
 public class ProductDBManager {
     private static final String LOG_TAG = ProductDBManager.class.getSimpleName();
@@ -38,16 +39,33 @@ public class ProductDBManager {
         return mContext.getContentResolver().query(uri, null, null, null, orderByClause);
     }
 
+    public ProductBean getItemById(String table, String productId){
+        ProductBean productBean = null;
+        Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon().appendPath(table).build();
+        String selectionClause = ProductSQLHelper.COLUMN_PRODUCT_ID + " = ?";
+        String[] selectionArgs = new String[]{productId};
+        Cursor cursor = mContext.getContentResolver().query(uri, null, selectionClause, selectionArgs, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            productBean = new ProductController(mContext).getProductBeanFromCursor(cursor);
+        }
+
+        return productBean;
+    }
+
+    //TODO This method needs to be optimized
     public int getPositionById(String table, String productId) {
         Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon().appendPath(table).build();
         String orderByClause = ProductSQLHelper.COLUMN_ORDER;
         Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, orderByClause);
+        ProductController productController = new ProductController(mContext);
 
         int result = 0;
         if (cursor != null) {
             ProductBean productBean;
             while(cursor.moveToNext()) {
-                productBean = new ProductBean();
+                productBean = productController.getProductBeanFromCursor(cursor);
                 if(productBean.productId.equals(productId)) {
                     result = cursor.getPosition();
                     break;

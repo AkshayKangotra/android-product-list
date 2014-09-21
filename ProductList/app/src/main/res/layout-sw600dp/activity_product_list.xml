@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".ProductListActivity">
+
+    <fragment
+        android:id="@+id/product_list_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:name="com.walmartlabs.productlist.ui.fragments.ProductListFragment"
+        />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:background="#a5a5a5" />
+
+    <FrameLayout
+        android:id="@+id/container_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:visibility="invisible">
+
+        <fragment
+            android:id="@+id/product_detail_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.walmartlabs.productlist.ui.fragments.ProductFragment"
+            />
+
+    </FrameLayout>
+
+</LinearLayout>

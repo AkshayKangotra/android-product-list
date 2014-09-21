@@ -5,9 +5,9 @@ import android.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class AndroidUtils {
+public class AndroidUtil {
 
-    private static final String LOG_TAG = AndroidUtils.class.getSimpleName();
+    private static final String LOG_TAG = AndroidUtil.class.getSimpleName();
 
     public static String sha256String(String source) {
         byte[] hash = null;

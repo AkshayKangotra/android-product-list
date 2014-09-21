@@ -29,7 +29,7 @@ public class FeedDataService extends IntentService {
 
         Log.d("Request Products", "New request pageNumber = " + pageNumber);
 
-        if (productBeanResponse != null) {
+        if (productBeanResponse != null && productBeanResponse.status == 200) {
             List<ProductBean> productBeanList = productBeanResponse.products;
             int listSize = 0;
 

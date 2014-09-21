@@ -53,12 +53,6 @@ public class ProductActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onStart() {
-
-    }
-
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.product, menu);
         return true;
@@ -121,10 +115,5 @@ public class ProductActivity extends ActionBarActivity {
             return mCount;
         }
 
-        @Override
-        public void destroyItem(View container, int position, Object object) {
-            super.destroyItem(container, position, object);
-            mPageReferenceMap.remove(position);
-        }
     }
 }

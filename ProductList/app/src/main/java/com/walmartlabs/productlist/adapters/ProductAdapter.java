@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.support.v4.widget.CursorAdapter;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,9 @@ import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
 import com.walmartlabs.productlist.ui.fragments.ProductListFragment;
-import com.walmartlabs.productlist.util.AndroidUtils;
+import com.walmartlabs.productlist.util.AndroidUtil;
 import com.walmartlabs.productlist.util.Constants;
+import com.walmartlabs.productlist.util.ImageLoadUtil;
 
 public class ProductAdapter extends CursorAdapter {
 
@@ -73,38 +75,26 @@ public class ProductAdapter extends CursorAdapter {
 
         public void apply(final ProductBean productBean) {
             //Clean the previous image from recycled view
-            productImage.setImageResource(0);
+            //TODO change placeholder
+            productImage.setImageResource(R.drawable.ic_launcher);
 
             if (productBean.productName != null) {
                 name.setText(productBean.productName);
             }
             if (productBean.shortDescription != null) {
-                shortDescription.setText(productBean.shortDescription);
+                shortDescription.setText(Html.fromHtml(productBean.shortDescription));
             }
             if (productBean.price != null) {
                 price.setText(productBean.price);
             }
             if (productBean.productImage != null) {
-                BitmapInfo cachedBitmapInfo = mIonBitmapCache.get(AndroidUtils.sha256String(productBean.productImage));
+                BitmapInfo cachedBitmapInfo = mIonBitmapCache.get(AndroidUtil.sha256String(productBean.productImage));
                 Boolean onCache = (cachedBitmapInfo != null && cachedBitmapInfo.bitmaps[0] != null);
 
                 if (onCache) {
                     productImage.setImageBitmap(cachedBitmapInfo.bitmaps[0]);
                 } else {
-                    Ion.with(context).load(productBean.productImage).withBitmap().asBitmap()
-                            .setCallback(new FutureCallback<Bitmap>() {
-                                @Override
-                                public void onCompleted(Exception e, Bitmap result) {
-                                    if (result != null) {
-                                        BitmapInfo info = new BitmapInfo(AndroidUtils.sha256String(productBean.productImage),
-                                                Constants.ION_CACHE_IMAGE_TYPE, new Bitmap[]{result}, null);
-                                        mIonBitmapCache.put(info);
-                                        productImage.setImageBitmap(result);
-                                    } else {
-                                        productImage.setImageResource(R.drawable.ic_launcher);
-                                    }
-                                }
-                            });
+                    ImageLoadUtil.loadImage(context, productImage, productBean.productImage, mIonBitmapCache);
                 }
             }
             container.setOnClickListener(new View.OnClickListener() {
