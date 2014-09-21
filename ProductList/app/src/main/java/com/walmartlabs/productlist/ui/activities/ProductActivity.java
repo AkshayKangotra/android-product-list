@@ -2,6 +2,7 @@ package com.walmartlabs.productlist.ui.activities;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -10,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,27 +29,19 @@ import java.util.Map;
 
 public class ProductActivity extends ActionBarActivity {
 
+    ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        int position = 0;
-
-        if (getIntent() != null) {
-            String productId = getIntent().getStringExtra(Constants.PRODUCT_ID_INTENT_EXTRA);
-            if (productId != null) {
-                position = ProductDBManager.getInstance(this.getApplicationContext())
-                        .getPositionById(ProductSQLHelper.TABLE_PRODUCTS, productId);
-            }
-        }
-
         //Lateral navigation configuration
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
 
-        mViewPager.setCurrentItem(position);
+        new GetProductPositionTask().execute();
     }
 
     @Override
@@ -56,23 +50,14 @@ public class ProductActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         private static final int NOT_INITIALIZED = -1;
         private int mCount = NOT_INITIALIZED;
-        private Map<Integer, Fragment> mPageReferenceMap;
+        private SparseArray<Fragment> mPageReferenceMap;
 
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
-            mPageReferenceMap = new HashMap<Integer, Fragment>();
+            mPageReferenceMap = new SparseArray<Fragment>();
         }
 
         public ProductFragment getFragment(int position){
@@ -83,11 +68,13 @@ public class ProductActivity extends ActionBarActivity {
         public Fragment getItem(int position) {
             Fragment fragment = new ProductFragment();
 
-            Cursor cursor = ProductDBManager.getInstance(getApplicationContext()).getAllItems(ProductSQLHelper.TABLE_PRODUCTS, null);
+            Cursor cursor = ProductDBManager.getInstance(getApplicationContext())
+                    .getAllItems(ProductSQLHelper.TABLE_PRODUCTS, null);
 
             if (cursor != null) {
                 cursor.moveToPosition(position);
                 ProductBean productBean = new ProductController(getApplicationContext()).getProductBeanFromCursor(cursor);
+                cursor.close();
 
                 Bundle bundle = getIntent().getExtras();
                 if (bundle != null) {
@@ -95,7 +82,6 @@ public class ProductActivity extends ActionBarActivity {
                 }
 
                 fragment.setArguments(bundle);
-                cursor.close();
             }
             mPageReferenceMap.put(position, fragment);
             return fragment;
@@ -104,7 +90,8 @@ public class ProductActivity extends ActionBarActivity {
         @Override
         public int getCount() {
             if(mCount == NOT_INITIALIZED) {
-                Cursor cursor = ProductDBManager.getInstance(getApplicationContext()).getAllItems(ProductSQLHelper.TABLE_PRODUCTS, null);
+                Cursor cursor = ProductDBManager.getInstance(getApplicationContext())
+                        .getAllItems(ProductSQLHelper.TABLE_PRODUCTS, null);
                 if (cursor != null) {
                     mCount = cursor.getCount();
                     cursor.close();
@@ -112,6 +99,26 @@ public class ProductActivity extends ActionBarActivity {
             }
             return mCount;
         }
+    }
 
+    private class GetProductPositionTask extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int position = 0;
+
+            if (getIntent() != null) {
+                String productId = getIntent().getStringExtra(Constants.PRODUCT_ID_INTENT_EXTRA);
+                if (productId != null) {
+                    position = ProductDBManager.getInstance(ProductActivity.this.getApplicationContext())
+                            .getPositionById(ProductSQLHelper.TABLE_PRODUCTS, productId);
+                }
+            }
+            return position;
+        }
+
+        @Override
+        protected void onPostExecute(Integer position) {
+            mViewPager.setCurrentItem(position);
+        }
     }
 }

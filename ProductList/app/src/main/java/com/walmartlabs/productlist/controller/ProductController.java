@@ -4,12 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.v4.content.Loader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.dao.ProductDBManager;
 import com.walmartlabs.productlist.dao.ProductSQLHelper;
 import com.walmartlabs.productlist.bean.ProductBean;
@@ -68,8 +70,9 @@ public class ProductController {
             cvList.add(productToContentValues(productBean));
         }
 
-        ContentValues[] contentValues = cvList.toArray(new ContentValues[cvList.size()]);
-        ProductDBManager.getInstance(mContext).insertList(ProductSQLHelper.TABLE_PRODUCTS, contentValues);
+        //noinspection unchecked
+        new InsertProductListTask().execute(cvList);
+
     }
 
     public void updateProducts() {
@@ -77,7 +80,8 @@ public class ProductController {
         long timeInMillisecondsSinceLastUpdate = sharedPreferencesHelper.readLong(SharedPreferencesHelper.Key.LAST_DATA_ACCESS_TIME);
         long timeInMillisecondsNow = System.currentTimeMillis();
 
-        if ((timeInMillisecondsNow - timeInMillisecondsSinceLastUpdate) > Constants.DATA_CACHE_TIME) {
+        if ((timeInMillisecondsNow - timeInMillisecondsSinceLastUpdate) >
+                mContext.getResources().getInteger(R.integer.data_cache_time)) {
             loadProducts();
             updateDataAccessTime();
         }
@@ -93,6 +97,15 @@ public class ProductController {
 
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(mContext);
         sharedPreferencesHelper.writeLong(SharedPreferencesHelper.Key.LAST_DATA_ACCESS_TIME, timeInMilisecondsSinceLastUpdate);
+    }
+
+    private class InsertProductListTask extends AsyncTask<List<ContentValues>, Void, Void>{
+        @Override
+        protected Void doInBackground(List<ContentValues>... cvList) {
+            ContentValues[] contentValues = cvList[0].toArray(new ContentValues[cvList[0].size()]);
+            ProductDBManager.getInstance(mContext).insertList(ProductSQLHelper.TABLE_PRODUCTS, contentValues);
+            return null;
+        }
     }
 
 }

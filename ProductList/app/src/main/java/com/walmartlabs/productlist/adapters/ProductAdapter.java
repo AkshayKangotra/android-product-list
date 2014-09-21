@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.async.future.FutureCallback;
@@ -49,7 +50,7 @@ public class ProductAdapter extends CursorAdapter {
         viewHolder.shortDescription = (TextView) view.findViewById(R.id.product_txt_short_description);
         viewHolder.price = (TextView) view.findViewById(R.id.product_txt_price);
         viewHolder.productImage = (ImageView) view.findViewById(R.id.product_image);
-        viewHolder.container = (FrameLayout) view.findViewById(R.id.list_item_product);
+        viewHolder.container = (LinearLayout) view.findViewById(R.id.list_item_product);
         view.setTag(viewHolder);
 
         return view;
@@ -66,7 +67,7 @@ public class ProductAdapter extends CursorAdapter {
         private TextView shortDescription;
         private TextView price;
         private ImageView productImage;
-        private FrameLayout container;
+        private LinearLayout container;
         private Context context;
 
         ViewHolder(Context context) {
@@ -75,7 +76,6 @@ public class ProductAdapter extends CursorAdapter {
 
         public void apply(final ProductBean productBean) {
             //Clean the previous image from recycled view
-            //TODO change placeholder
             productImage.setImageResource(R.drawable.ic_launcher);
 
             if (productBean.productName != null) {

@@ -3,6 +3,7 @@ package com.walmartlabs.productlist.dao;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.util.Constants;
 
 public class SharedPreferencesHelper {
@@ -15,7 +16,8 @@ public class SharedPreferencesHelper {
 
     public static SharedPreferencesHelper getInstance(Context context) {
         if(sharedPreferencesHelper == null) {
-            sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+            sharedPreferences = context.getSharedPreferences(
+                    context.getResources().getString(R.string.shared_preferences_file), Context.MODE_PRIVATE);
             sharedPreferencesHelper = new SharedPreferencesHelper();
         }
         return sharedPreferencesHelper;

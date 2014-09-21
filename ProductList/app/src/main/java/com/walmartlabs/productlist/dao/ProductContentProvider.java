@@ -2,6 +2,7 @@ package com.walmartlabs.productlist.dao;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDiskIOException;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.util.Constants;
 
 public class ProductContentProvider extends ContentProvider {
@@ -17,14 +19,14 @@ public class ProductContentProvider extends ContentProvider {
     public static final String RAW = "raw_query";
     public static final String ONE_ROW_LIMIT = "one_row_limit";
     public static final String ORDER_BY = " ORDER BY ";
-    private static String AUTHORITY = Constants.CONTENT_PROVIDER_AUTORITHIES;
-    public static Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    private static String AUTHORITY;
+    public static Uri BASE_CONTENT_URI;
     protected ProductSQLHelper sqlHelper;
-    private static final String LOG_TAG = ProductContentProvider.class.getSimpleName();
 
     @Override
     public boolean onCreate() {
-        Log.d(LOG_TAG, "onCreate");
+        AUTHORITY = getContext().getString(R.string.content_provider_autorithies);
+        BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
         sqlHelper = ProductSQLHelper.getInstance(getContext());
         return true;
     }
@@ -36,7 +38,7 @@ public class ProductContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Cursor c;
+        Cursor cursor;
         SQLiteDatabase mDb = sqlHelper.getReadableDatabase();
         String table = uri.getLastPathSegment();
         Uri listenedUri;
@@ -47,19 +49,19 @@ public class ProductContentProvider extends ContentProvider {
             if (!TextUtils.isEmpty(sortOrder)) {
                 sql.append(ORDER_BY).append(sortOrder);
             }
-            c = mDb.rawQuery(sql.toString(), selectionArgs);
+            cursor = mDb.rawQuery(sql.toString(), selectionArgs);
         } else if (uri.toString().contains(ONE_ROW_LIMIT)) {
-            c = mDb.query(false, table, projection, selection, selectionArgs, null, null, sortOrder, "1");
+            cursor = mDb.query(false, table, projection, selection, selectionArgs, null, null, sortOrder, "1");
             listenedUri = ProductContentProvider.BASE_CONTENT_URI.buildUpon().appendPath(table).build();
         } else {
             listenedUri = uri;
-            c = mDb.query(false, table, projection, selection, selectionArgs, null, null, sortOrder, null);
+            cursor = mDb.query(false, table, projection, selection, selectionArgs, null, null, sortOrder, null);
         }
-        if (c != null) {
-            c.setNotificationUri(getContext().getContentResolver(), listenedUri);
+        if (cursor != null) {
+            cursor.setNotificationUri(getContext().getContentResolver(), listenedUri);
         }
 
-        return c;
+        return cursor;
     }
 
     @Override
@@ -124,7 +126,6 @@ public class ProductContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-
         String table = uri.getLastPathSegment();
         SQLiteDatabase mDb = sqlHelper.getWritableDatabase();
         int count = mDb.delete(table, selection, selectionArgs);

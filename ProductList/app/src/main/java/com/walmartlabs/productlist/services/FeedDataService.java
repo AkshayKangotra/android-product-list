@@ -6,6 +6,7 @@ import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.api.FeedDataAPI;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.bean.ProductBeanResponse;
@@ -27,7 +28,8 @@ public class FeedDataService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         int pageNumber = getPageNumber();
         Intent intentBroadcast = new Intent(Constants.LOAD_FINISHED_ACTION);
-        ProductBeanResponse productBeanResponse = new FeedDataAPI().getProductList(pageNumber, Constants.NUMBER_OF_PRODUCTS_PER_PAGE);
+        ProductBeanResponse productBeanResponse = new FeedDataAPI(getApplicationContext())
+                .getProductList(pageNumber, getResources().getInteger(R.integer.number_of_products_per_page));
 
         Log.d("Request Products", "New request pageNumber = " + pageNumber);
 
@@ -53,7 +55,7 @@ public class FeedDataService extends IntentService {
     private int getPageNumber() {
         ProductDBManager productDBManager = ProductDBManager.getInstance(this);
         int productCount = productDBManager.count(ProductSQLHelper.TABLE_PRODUCTS);
-        return (productCount / Constants.NUMBER_OF_PRODUCTS_PER_PAGE) + 1;
+        return (productCount / getResources().getInteger(R.integer.number_of_products_per_page)) + 1;
     }
 
 }

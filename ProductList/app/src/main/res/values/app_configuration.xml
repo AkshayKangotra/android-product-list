@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ProductList</string>
-    <string name="action_settings">Settings</string>
     <bool name="is_tablet">false</bool>
-    
+    <string name="api_url">https://walmart-labs.appspot.com/_ah/api/walmart/v1</string>
+    <string name="content_provider_autorithies">com.walmartlabs.productlist</string>
+    <integer name="number_of_products_per_page">30</integer>
+    <string name="shared_preferences_file">com.walmartlabs.productlist</string>
+
+    <string name="ion_cache_image_type">image/png</string>
+    <integer name="data_cache_time">3600000</integer>
+
 </resources>

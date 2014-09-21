@@ -1,6 +1,8 @@
 package com.walmartlabs.productlist.ui.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,13 +47,7 @@ public class ProductFragment extends Fragment {
         inStock = (TextView) view.findViewById(R.id.inStock);
         productImage = (ImageView) view.findViewById(R.id.product_image);
 
-        if (getArguments() != null) {
-            String productId = getArguments().getString(Constants.PRODUCT_ID_INTENT_EXTRA);
-            ProductBean productBean = ProductDBManager.getInstance(getActivity()
-                    .getApplicationContext()).getItemById(ProductSQLHelper.TABLE_PRODUCTS, productId);
-
-            setLayoutValues(productBean);
-        }
+        new GetProductItemTask().execute();
 
         return view;
     }
@@ -80,6 +76,25 @@ public class ProductFragment extends Fragment {
 
             IonBitmapCache ionBitmapCache = new IonBitmapCache(Ion.getDefault(getActivity().getApplicationContext()));
             ImageLoadUtil.loadImage(getActivity(), productImage, productBean.productImage, ionBitmapCache);
+        }
+    }
+
+    private class GetProductItemTask extends AsyncTask<Void, Void, ProductBean> {
+        @Override
+        protected ProductBean doInBackground(Void... params) {
+            ProductBean productBean = null;
+
+            if (getArguments() != null) {
+                String productId = getArguments().getString(Constants.PRODUCT_ID_INTENT_EXTRA);
+                productBean = ProductDBManager.getInstance(getActivity()
+                        .getApplicationContext()).getItemById(ProductSQLHelper.TABLE_PRODUCTS, productId);
+            }
+            return productBean;
+        }
+
+        @Override
+        protected void onPostExecute(ProductBean productBean) {
+            setLayoutValues(productBean);
         }
     }
 }
