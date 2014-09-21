@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
+import com.walmartlabs.productlist.dao.SharedPreferencesHelper;
 import com.walmartlabs.productlist.ui.fragments.ProductFragment;
 import com.walmartlabs.productlist.ui.fragments.ProductListFragment;
 import com.walmartlabs.productlist.util.Constants;
@@ -49,14 +50,13 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
 
         LocalBroadcastManager.getInstance(this).registerReceiver(loadFinishedBroadcastReceiver, new IntentFilter(Constants.LOAD_FINISHED_ACTION));
 
-        ProductController productController = new ProductController(this);
-        productController.loadProducts(false);
+        new ProductController(getApplicationContext()).updateProducts();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.product_list, menu);
+        getMenuInflater().inflate(R.menu.product, menu);
         return true;
     }
 
@@ -79,7 +79,7 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
     public void onClickProduct(ProductBean productBean) {
         if (getResources().getBoolean(R.bool.is_tablet)) {
             findViewById(R.id.container_details).setVisibility(View.VISIBLE);
-            mProductFragment.fillWithProduct(productBean);
+            mProductFragment.setLayoutValues(productBean);
         } else {
             Intent intent = new Intent(this, ProductActivity.class);
             intent.putExtra(Constants.PRODUCT_ID_INTENT_EXTRA, productBean.productId);

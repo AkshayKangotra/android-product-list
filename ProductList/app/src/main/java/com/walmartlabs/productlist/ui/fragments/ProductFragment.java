@@ -50,13 +50,13 @@ public class ProductFragment extends Fragment {
             ProductBean productBean = ProductDBManager.getInstance(getActivity()
                     .getApplicationContext()).getItemById(ProductSQLHelper.TABLE_PRODUCTS, productId);
 
-            fillWithProduct(productBean);
+            setLayoutValues(productBean);
         }
 
         return view;
     }
 
-    public void fillWithProduct(ProductBean productBean) {
+    public void setLayoutValues(ProductBean productBean) {
         if (productBean != null) {
             if (productBean.productName != null) {
                 name.setText(productBean.productName);

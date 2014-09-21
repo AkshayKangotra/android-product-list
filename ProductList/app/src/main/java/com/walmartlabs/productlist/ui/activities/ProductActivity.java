@@ -27,8 +27,6 @@ import java.util.Map;
 
 public class ProductActivity extends ActionBarActivity {
 
-    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +43,7 @@ public class ProductActivity extends ActionBarActivity {
         }
 
         //Lateral navigation configuration
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
 

@@ -13,7 +13,9 @@ import java.util.Random;
 import com.walmartlabs.productlist.dao.ProductDBManager;
 import com.walmartlabs.productlist.dao.ProductSQLHelper;
 import com.walmartlabs.productlist.bean.ProductBean;
+import com.walmartlabs.productlist.dao.SharedPreferencesHelper;
 import com.walmartlabs.productlist.services.FeedDataService;
+import com.walmartlabs.productlist.util.Constants;
 
 public class ProductController {
 
@@ -21,17 +23,6 @@ public class ProductController {
 
     public ProductController(Context context) {
         mContext = context;
-    }
-
-    public void insertProductList(List<ProductBean> list) {
-        List<ContentValues> cvList = new ArrayList<ContentValues>();
-
-        for (ProductBean productBean : list) {
-            cvList.add(productToContentValues(productBean));
-        }
-
-        ContentValues[] contentValues = cvList.toArray(new ContentValues[cvList.size()]);
-        ProductDBManager.getInstance(mContext).insertList(ProductSQLHelper.TABLE_PRODUCTS, contentValues);
     }
 
     public ContentValues productToContentValues(ProductBean productBean) {
@@ -70,12 +61,38 @@ public class ProductController {
                 .getLoader(ProductSQLHelper.TABLE_PRODUCTS, null, null, null, ProductSQLHelper.COLUMN_ORDER);
     }
 
-    public void loadProducts(boolean forceLoad){
-        //TODO add cache verification
-        if (ProductDBManager.getInstance(mContext).count(ProductSQLHelper.TABLE_PRODUCTS) == 0 || forceLoad) {
-            Intent intent = new Intent(mContext, FeedDataService.class);
-            mContext.startService(intent);
+    public void insertProductList(List<ProductBean> list) {
+        List<ContentValues> cvList = new ArrayList<ContentValues>();
+
+        for (ProductBean productBean : list) {
+            cvList.add(productToContentValues(productBean));
         }
+
+        ContentValues[] contentValues = cvList.toArray(new ContentValues[cvList.size()]);
+        ProductDBManager.getInstance(mContext).insertList(ProductSQLHelper.TABLE_PRODUCTS, contentValues);
+    }
+
+    public void updateProducts() {
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(mContext);
+        long timeInMillisecondsSinceLastUpdate = sharedPreferencesHelper.readLong(SharedPreferencesHelper.Key.LAST_DATA_ACCESS_TIME);
+        long timeInMillisecondsNow = System.currentTimeMillis();
+
+        if ((timeInMillisecondsNow - timeInMillisecondsSinceLastUpdate) > Constants.DATA_CACHE_TIME) {
+            loadProducts();
+            updateDataAccessTime();
+        }
+    }
+
+    public void loadProducts(){
+        Intent intent = new Intent(mContext, FeedDataService.class);
+        mContext.startService(intent);
+    }
+
+    private void updateDataAccessTime(){
+        long timeInMilisecondsSinceLastUpdate = System.currentTimeMillis();
+
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(mContext);
+        sharedPreferencesHelper.writeLong(SharedPreferencesHelper.Key.LAST_DATA_ACCESS_TIME, timeInMilisecondsSinceLastUpdate);
     }
 
 }

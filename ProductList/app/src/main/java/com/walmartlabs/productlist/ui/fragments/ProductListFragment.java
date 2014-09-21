@@ -51,7 +51,7 @@ public class ProductListFragment extends ListFragment implements LoaderManager.L
             @Override
             public void onLoadMore() {
                 ProductController productController = new ProductController(getActivity());
-                productController.loadProducts(true);
+                productController.loadProducts();
             }
         });
     }

@@ -10,6 +10,9 @@ public class Constants {
     public static final String LIST_SIZE_INTENT_EXTRA = "LIST_SIZE_INTENT_EXTRA";
     public static final String PRODUCT_ID_INTENT_EXTRA = "PRODUCT_ID_INTENT_EXTRA";
 
+    public static final String SHARED_PREFERENCES_FILE = "com.walmartlabs.productlist";
+
     public static final String ION_CACHE_IMAGE_TYPE = "image/png";
+    public static final long DATA_CACHE_TIME = 3600000;
 
 }
