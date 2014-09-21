@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.walmartlabs.productlist.R;
-import com.walmartlabs.productlist.util.Constants;
 
 public class SharedPreferencesHelper {
 

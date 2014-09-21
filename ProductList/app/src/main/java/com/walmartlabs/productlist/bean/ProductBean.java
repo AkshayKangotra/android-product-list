@@ -1,7 +1,5 @@
 package com.walmartlabs.productlist.bean;
 
-import android.database.Cursor;
-
 public class ProductBean {
     public String productId;
     public String productName;

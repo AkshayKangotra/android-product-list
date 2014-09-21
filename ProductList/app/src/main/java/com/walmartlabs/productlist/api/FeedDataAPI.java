@@ -2,12 +2,8 @@ package com.walmartlabs.productlist.api;
 
 import android.content.Context;
 
-import java.util.List;
-
 import com.walmartlabs.productlist.R;
-import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.bean.ProductBeanResponse;
-import com.walmartlabs.productlist.util.Constants;
 
 import retrofit.RestAdapter;
 import retrofit.http.Path;

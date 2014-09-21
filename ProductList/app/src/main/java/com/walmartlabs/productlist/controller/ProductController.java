@@ -9,7 +9,6 @@ import android.support.v4.content.Loader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.dao.ProductDBManager;
@@ -17,7 +16,6 @@ import com.walmartlabs.productlist.dao.ProductSQLHelper;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.dao.SharedPreferencesHelper;
 import com.walmartlabs.productlist.services.FeedDataService;
-import com.walmartlabs.productlist.util.Constants;
 
 public class ProductController {
 

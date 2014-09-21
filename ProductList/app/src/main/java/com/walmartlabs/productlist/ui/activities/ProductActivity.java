@@ -1,20 +1,16 @@
 package com.walmartlabs.productlist.ui.activities;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.bean.ProductBean;
@@ -23,9 +19,6 @@ import com.walmartlabs.productlist.dao.ProductDBManager;
 import com.walmartlabs.productlist.dao.ProductSQLHelper;
 import com.walmartlabs.productlist.ui.fragments.ProductFragment;
 import com.walmartlabs.productlist.util.Constants;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ProductActivity extends ActionBarActivity {
 

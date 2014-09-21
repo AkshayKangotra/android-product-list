@@ -3,18 +3,15 @@ package com.walmartlabs.productlist.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.support.v4.widget.CursorAdapter;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.bitmap.BitmapInfo;
 import com.koushikdutta.ion.bitmap.IonBitmapCache;
@@ -23,7 +20,6 @@ import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
 import com.walmartlabs.productlist.ui.fragments.ProductListFragment;
 import com.walmartlabs.productlist.util.AndroidUtil;
-import com.walmartlabs.productlist.util.Constants;
 import com.walmartlabs.productlist.util.ImageLoadUtil;
 
 public class ProductAdapter extends CursorAdapter {

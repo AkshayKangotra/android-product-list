@@ -2,9 +2,7 @@ package com.walmartlabs.productlist.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.api.FeedDataAPI;
@@ -13,7 +11,6 @@ import com.walmartlabs.productlist.bean.ProductBeanResponse;
 import com.walmartlabs.productlist.controller.ProductController;
 import com.walmartlabs.productlist.dao.ProductDBManager;
 import com.walmartlabs.productlist.dao.ProductSQLHelper;
-import com.walmartlabs.productlist.dao.SharedPreferencesHelper;
 import com.walmartlabs.productlist.util.Constants;
 
 import java.util.List;
@@ -31,8 +28,6 @@ public class FeedDataService extends IntentService {
         ProductBeanResponse productBeanResponse = new FeedDataAPI(getApplicationContext())
                 .getProductList(pageNumber, getResources().getInteger(R.integer.number_of_products_per_page));
 
-        Log.d("Request Products", "New request pageNumber = " + pageNumber);
-
         if (productBeanResponse != null && productBeanResponse.status == 200) {
             List<ProductBean> productBeanList = productBeanResponse.products;
             int listSize = 0;
@@ -42,7 +37,6 @@ public class FeedDataService extends IntentService {
                 productController.insertProductList(productBeanList);
 
                 listSize = productBeanList.size();
-                Log.d("Request Products", "New request ListSize = " + listSize);
             }
 
             intentBroadcast.putExtra(Constants.LIST_SIZE_INTENT_EXTRA, listSize);

@@ -1,20 +1,14 @@
 package com.walmartlabs.productlist.ui.fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.costum.android.widget.LoadMoreListView;
@@ -22,8 +16,6 @@ import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.adapters.ProductAdapter;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
-
-import java.util.List;
 
 public class ProductListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 

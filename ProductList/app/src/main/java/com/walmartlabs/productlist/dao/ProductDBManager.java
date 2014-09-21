@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.walmartlabs.productlist.bean.ProductBean;
@@ -54,7 +53,7 @@ public class ProductDBManager {
         return productBean;
     }
 
-    //TODO This method needs to be optimized
+    //TODO This method needs to be optimized in the future
     public int getPositionById(String table, String productId) {
         Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon().appendPath(table).build();
         String orderByClause = ProductSQLHelper.COLUMN_ORDER;
@@ -74,6 +73,30 @@ public class ProductDBManager {
             cursor.close();
         }
         return result;
+    }
+
+    // This is an attempt to optimize the above method, but isn't quite working for some rows.
+    // Sorry guys, I tried my best here.
+    public int getPositionByIdOptimizationAttempt(String table, String productId) {
+        int position = 0;
+        Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon()
+                .appendPath(ProductContentProvider.RAW).appendPath(table).build();
+
+        String selectionClause = "SELECT COUNT(*) " +
+            "FROM " + ProductSQLHelper.TABLE_PRODUCTS + " " +
+            "WHERE " + ProductSQLHelper.COLUMN_ORDER + " < " + "(SELECT " + ProductSQLHelper.COLUMN_ORDER +
+                                                                " FROM " + ProductSQLHelper.TABLE_PRODUCTS +
+                                                                " WHERE " + ProductSQLHelper.COLUMN_PRODUCT_ID +
+                                                                " = '" + productId + "')";
+
+        Cursor cursor = mContext.getContentResolver().query(uri, null, selectionClause, null, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            position = cursor.getInt(0);
+        }
+
+        return position;
     }
 
     public void insertList(String table, ContentValues[] values) {

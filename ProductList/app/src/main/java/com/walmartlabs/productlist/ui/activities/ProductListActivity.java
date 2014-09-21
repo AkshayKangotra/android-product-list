@@ -8,19 +8,15 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.walmartlabs.productlist.R;
 import com.walmartlabs.productlist.bean.ProductBean;
 import com.walmartlabs.productlist.controller.ProductController;
-import com.walmartlabs.productlist.dao.SharedPreferencesHelper;
 import com.walmartlabs.productlist.ui.fragments.ProductFragment;
 import com.walmartlabs.productlist.ui.fragments.ProductListFragment;
 import com.walmartlabs.productlist.util.Constants;
-
-import java.util.List;
 
 
 public class ProductListActivity extends ActionBarActivity implements ProductListFragment.OnProductListActionListener{

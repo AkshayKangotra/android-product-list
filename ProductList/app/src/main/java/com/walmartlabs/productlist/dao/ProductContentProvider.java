@@ -2,17 +2,14 @@ package com.walmartlabs.productlist.dao;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDiskIOException;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.walmartlabs.productlist.R;
-import com.walmartlabs.productlist.util.Constants;
 
 public class ProductContentProvider extends ContentProvider {
 

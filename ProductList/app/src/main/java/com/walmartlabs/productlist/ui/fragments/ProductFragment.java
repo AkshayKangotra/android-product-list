@@ -22,6 +22,8 @@ import com.walmartlabs.productlist.dao.ProductSQLHelper;
 import com.walmartlabs.productlist.util.Constants;
 import com.walmartlabs.productlist.util.ImageLoadUtil;
 
+import java.io.UnsupportedEncodingException;
+
 public class ProductFragment extends Fragment {
 
     View view;
@@ -61,7 +63,11 @@ public class ProductFragment extends Fragment {
                 price.setText(productBean.price);
             }
             if (productBean.longDescription != null) {
-                longDescription.setText(Html.fromHtml(productBean.longDescription));
+                try {
+                    longDescription.setText(Html.fromHtml(new String(productBean.longDescription.getBytes(), "UTF-8")));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
             reviewRating.setText(getActivity().getString(R.string.review_rating_text, productBean.reviewRating));
             reviewCount.setText(getActivity().getString(R.string.review_count_text, productBean.reviewCount));
