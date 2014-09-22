@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.walmartlabs.productlist" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        tools:replace="android:icon"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/walmartlabs"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.activities.ProductListActivity"
-            android:icon="@drawable/walmartlabs"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +22,7 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.ProductActivity"
-            android:icon="@drawable/walmartlabs">
+            android:name=".ui.activities.ProductActivity">
         </activity>
 
         <service

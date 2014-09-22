@@ -18,8 +18,14 @@ public class FeedDataAPI implements FeedDataInterface{
 
     @Override
     public ProductBeanResponse getProductList(@Path("pageNumber") int pageNumber, @Path("pageSize") int pageSize) {
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(mContext.getString(R.string.api_url)).build();
-        FeedDataInterface feedDataInterface = restAdapter.create(FeedDataInterface.class);
-        return feedDataInterface.getProductList(pageNumber, pageSize);
+        ProductBeanResponse response = null;
+        try {
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(mContext.getString(R.string.api_url)).build();
+            FeedDataInterface feedDataInterface = restAdapter.create(FeedDataInterface.class);
+            response = feedDataInterface.getProductList(pageNumber, pageSize);
+        } catch (Exception e) {
+            //Log in Crashlytics
+        }
+        return response;
     }
 }

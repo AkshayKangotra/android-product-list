@@ -23,7 +23,7 @@ public class ImageLoadUtil {
                             ionBitmapCache.put(info);
                             imageView.setImageBitmap(result);
                         } else {
-                            imageView.setImageResource(R.drawable.ic_launcher);
+                            imageView.setImageResource(R.drawable.placeholder);
                         }
                     }
                 });

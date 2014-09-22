@@ -72,7 +72,7 @@ public class ProductAdapter extends CursorAdapter {
 
         public void apply(final ProductBean productBean) {
             //Clean the previous image from recycled view
-            productImage.setImageResource(R.drawable.ic_launcher);
+            productImage.setImageResource(R.drawable.placeholder);
 
             if (productBean.productName != null) {
                 name.setText(productBean.productName);

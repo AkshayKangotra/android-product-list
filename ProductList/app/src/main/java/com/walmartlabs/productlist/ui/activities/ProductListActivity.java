@@ -31,7 +31,9 @@ public class ProductListActivity extends ActionBarActivity implements ProductLis
     BroadcastReceiver loadFinishedBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(!intent.hasExtra(Constants.LIST_SIZE_INTENT_EXTRA)) {
+            if(intent.hasExtra(Constants.LIST_SIZE_INTENT_EXTRA)) {
+                new ProductController(getApplicationContext()).updateDataAccessTime();
+            } else {
                 Toast.makeText(ProductListActivity.this, getString(R.string.load_products_error), Toast.LENGTH_LONG).show();
             }
             if (mProductListFragment != null) {

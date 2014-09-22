@@ -81,7 +81,6 @@ public class ProductController {
         if ((timeInMillisecondsNow - timeInMillisecondsSinceLastUpdate) >
                 mContext.getResources().getInteger(R.integer.data_cache_time)) {
             loadProducts();
-            updateDataAccessTime();
         }
     }
 
@@ -90,7 +89,7 @@ public class ProductController {
         mContext.startService(intent);
     }
 
-    private void updateDataAccessTime(){
+    public void updateDataAccessTime(){
         long timeInMilisecondsSinceLastUpdate = System.currentTimeMillis();
 
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(mContext);
