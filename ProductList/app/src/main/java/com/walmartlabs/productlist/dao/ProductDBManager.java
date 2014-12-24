@@ -76,7 +76,7 @@ public class ProductDBManager {
     }
 
     // This is an attempt to optimize the above method, but isn't quite working for some rows.
-    // Sorry guys, I tried my best here.
+    // It is not being currently used.
     public int getPositionByIdOptimizationAttempt(String table, String productId) {
         int position = 0;
         Uri uri = ProductContentProvider.BASE_CONTENT_URI.buildUpon()
